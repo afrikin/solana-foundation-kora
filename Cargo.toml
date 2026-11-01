@@ -1,0 +1,16 @@
+[package]
+name = "kora-relayer"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Solana relayer library and CLI for signing experiences"
+
+[lib]
+name = "kora_relayer"
+path = "src/lib.rs"
+
+[[bin]]
+name = "kora"
+path = "src/main.rs"
+
+[dependencies]
