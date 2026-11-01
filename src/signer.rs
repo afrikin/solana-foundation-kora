@@ -18,3 +18,20 @@ impl Signer for MemorySigner {
         message.iter().map(|b| b.wrapping_add(7)).collect()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn signature_matches_message_length() {
+        let s = MemorySigner { key: "k".into() };
+        assert_eq!(s.sign(b"abc").len(), 3);
+    }
+
+    #[test]
+    fn public_key_is_returned_verbatim() {
+        let s = MemorySigner { key: "payer-1".into() };
+        assert_eq!(s.public_key(), "payer-1");
+    }
+}
