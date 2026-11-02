@@ -27,6 +27,11 @@ mod tests {
     }
 
     #[test]
+    fn refuses_u64_max() {
+        assert!(check_fee(&cfg(1_000), u64::MAX).is_err());
+    }
+
+    #[test]
     fn accepts_zero() {
         assert_eq!(check_fee(&cfg(10), 0).unwrap(), 0);
     }
