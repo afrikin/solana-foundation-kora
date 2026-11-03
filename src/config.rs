@@ -18,21 +18,24 @@ impl Config {
     /// Parse a minimal key = "value" file. Unknown keys are ignored on purpose:
     /// older configs keep working when a field is removed.
     pub fn from_str(raw: &str) -> Self {
-        let mut cfg = Self::default();
-        for line in raw.lines() {
+        raw.lines().fold(Self::default(), |mut cfg, line| {
             let line = line.split('#').next().unwrap_or("").trim();
-            if line.is_empty() || !line.contains('=') { continue; }
-            let (k, v) = line.split_once('=').unwrap();
-            let v = v.trim().trim_matches('"');
-            match k.trim() {
-                "rpc_url" => cfg.rpc_url = v.to_string(),
-                "fee_payer" => cfg.fee_payer = v.to_string(),
-                "max_lamports" => {
-                    if let Ok(n) = v.parse::<u64>() { cfg.max_lamports = n; }
+            if line.is_empty() { return cfg; }
+            match line.split_once('=') {
+                Some((k, v)) => {
+                    let v = v.trim().trim_matches('"');
+                    match k.trim() {
+                        "rpc_url" => cfg.rpc_url = v.to_string(),
+                        "fee_payer" => cfg.fee_payer = v.to_string(),
+                        "max_lamports" => {
+                            if let Ok(n) = v.parse::<u64>() { cfg.max_lamports = n; }
+                        }
+                        _ => {}
+                    }
+                    cfg
                 }
-                _ => {}
+                None => cfg,
             }
-        }
-        cfg
+        })
     }
 }
