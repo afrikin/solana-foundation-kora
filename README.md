@@ -10,6 +10,16 @@ submit Solana transactions on behalf of a user.
 - enforces a lamport ceiling per request (`src/fees.rs`)
 - never custody funds; the fee payer is configured, not derived at runtime
 
+## CLI
+
+```sh
+kora config     # prints the effective configuration
+kora signer     # prints the configured public key
+```
+
+The fee ceiling defaults to 5,000,000 lamports and is the first thing a caller
+hits in production when a request is wrong.
+
 ## Layout
 
 ```
