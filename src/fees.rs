@@ -32,6 +32,14 @@ mod tests {
     }
 
     #[test]
+    fn ceiling_is_checked_before_any_work() {
+        // A caller already over the ceiling should never pay for a failed build.
+        let cfg = cfg(5);
+        assert!(check_fee(&cfg, 6).is_err());
+        assert_eq!(check_fee(&cfg, 5).unwrap(), 5);
+    }
+
+    #[test]
     fn accepts_zero() {
         assert_eq!(check_fee(&cfg(10), 0).unwrap(), 0);
     }
